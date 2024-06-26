@@ -11,8 +11,6 @@ function formHandler(event) {
         
 
 
-
-
         addTaskFunk(name, color, notags, tagU, tagI, start, end);
         document.getElementById('taskForm').reset();
         noNeew();
@@ -49,14 +47,17 @@ function addTaskFunk(name, color, notags, tagU, tagI, start, end){
         checkedtag = checkedtag + "&#8252;";
     }
     entry.innerHTML = `
-    <div class="topTask">
-        <input type="checkbox" onclick="prozentding()" name="done" id="done">
-        <p>${name}</p>
-        <div class="taskTag">
-        <p>${checkedtag}</p>
+    <div class="wholeTask">
+        <div class="topTask">
+            <input type="checkbox" onclick="prozentding()" name="done" id="done">
+            <p>${name}</p>
+            <div class="taskTag">
+            <p>${checkedtag}</p>
+            </div>
         </div>
+        <img src="trash.svg" id="delete" name="delete"  onclick="deleteT(this);" alt="Delete">
+        <p id="edit">&#9998</p>
     </div>
-    <button type="submit" name="delete"><img src="weg.svg" alt="Delete"></button>
      `
     container.appendChild(entry);
     prozentding();
@@ -66,6 +67,13 @@ function prozentding(){
     const totalcheck = allecheck.length;
     const donecheck = Array.from(allecheck).filter(checkbox => checkbox.checked).length;
     document.getElementById('erledigt').textContent= `Progress: ${donecheck} / ${totalcheck}`;
+}
+function deleteT(el){
+    let rlyDelete = confirm("do you really want to delete this task?")
+    if (rlyDelete == true){
+        let element = el;
+        element.remove();
+    }
 }
 function nosing() {
     urgend.checked = false;

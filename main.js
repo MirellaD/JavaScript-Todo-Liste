@@ -111,8 +111,9 @@ function prozentding(){
 function deleteT(el){
     let rlyDelete = confirm("do you really want to delete this task?")
     if (rlyDelete == true){
-        let element = el;
-        element.remove();
+
+        let parentDiv = el.closest('.wholeTask'); // sucht das nähste "wholeTask" div und speichert das in "parentDiv"
+        parentDiv.remove(); //entfernt den completten div in dem sich das element(delete img) befindet
     }
 }
 

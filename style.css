@@ -43,6 +43,10 @@ progress {
 }
 .TaskName{
     padding: 1%;
+    
+}
+#taskdate{
+    opacity: 50%;
     flex: 1 1 0%;
 }
 .TaskBody{
@@ -102,5 +106,17 @@ progress {
     width: 50%;
 }
 #editTaskPopup{
+    display: none;
+}
+#editForm{
     display:none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px
+        rgba(0, 0, 0, 0.1);
+    z-index: 1000;
 }

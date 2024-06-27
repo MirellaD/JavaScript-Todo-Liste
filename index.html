@@ -42,8 +42,8 @@
                 <br>
                 <br>
                 <label for="">Time period</label> <br>
-                <span><input type="date" name="von" id="from"> - 
-                <input type="date" name="bis" id="too"></span>
+                <span><input type="date" name="von" class="todaydate" id="from" > - 
+                <input type="date" name="bis" class="todaydate" id="too"></span>
                 <br>
                 <br>
                 <button type="submit">finished</button>
@@ -58,6 +58,31 @@
         <span id="erledigt">progress : 0 / 0</span>
         <progress value="60" max="100"></progress>                
     </div>
+</div>
+<div id="editTaskPopup">
+    <form id="editForm">
+        <label for="editName">Name:</label>
+        <input type="text" id="editName" name="editName"><br>
+        <label for="editColor">Color:</label>
+        <select id="editColor" name="editColor">
+            <option value="pink" selected>pink</option>
+            <option value="lavender">lavender</option>
+            <option value="blue">blue</option>
+            <option value="green">green</option>
+            <option value="yellow">yellow</option>
+            <option value="red">red</option>
+            <option value="orange">orange</option>
+        </select><br>
+        <label for="editTags">Tags:</label>
+        <input type="checkbox" id="none" name="stillNoTags" onclick="nosing()">None    
+        <input type="checkbox" id="editTagU" name="editTagU" onclick="yess()">Urgent  
+        <input type="checkbox" id="editTagI" name="editTagI" onclick="yess()">Important   <br>
+        <label for="editStart">Start Time:</label>
+        <input type="date" id="editStart" name="editStart"><br>
+        <label for="editEnd">End Time:</label>
+        <input type="date" id="editEnd" name="editEnd"><br>
+        <button type="submit">Save Changes</button>
+    </form>
 </div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

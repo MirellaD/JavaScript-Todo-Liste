@@ -1,29 +1,3 @@
-/*function formHandler(event) {
-    event.preventDefault();
-    if($("input[type=checkbox]").is(":checked")){
-        let name = document.getElementById("name").value;
-        let color = document.querySelector('select[name="color"]').value
-        let notags = document.getElementById("none").checked;
-        let tagU = document.getElementById("urgend").checked;
-        let tagI = document.getElementById("important").checked;
-        let start = document.getElementById("from").value
-        let end = document.getElementById("too").value
-        
-        console.log(!name); //schaut ob der name ausgefüllt worden ist
-        if (!name){
-            alert("please name your Task")
-        }
-    
-
-
-        addTaskFunk(name, color, notags, tagU, tagI, start, end);
-        document.getElementById('taskForm').reset();
-        noNeew();
-    }else{
-        alert("please select a Tag");
-    }
-}*/
-$(document).off('.data-api')
 
 function formHandler(event) {
     event.preventDefault(); //reloaded die seite nicht beim submitten
@@ -111,15 +85,28 @@ function prozentding(){
 function deleteT(el){
     let rlyDelete = confirm("do you really want to delete this task?")
     if (rlyDelete == true){
-
-        let parentDiv = el.closest('.wholeTask'); // sucht das nähste "wholeTask" div und speichert das in "parentDiv"
+        let parentDiv = el.closest('.addedTask'); // sucht das nähste "addedTask" div und speichert das in "parentDiv"
         parentDiv.remove(); //entfernt den completten div in dem sich das element(delete img) befindet
     }
 }
 
-function editT(){
+function editT(event){
+    //thisedit = el.closest('.addedTask') die task die am nehsten ist, finden
 
-} 
+    console.log("oui");
+
+    // Assuming the task ID is stored in the 'data-id' attribute of the edit button
+    var taskId = event.target.dataset.id;
+
+    // Populate the pop-up with the existing task details
+    var taskNameElement = document.getElementById('taskName');
+    // Fetch the task details from your storage or API and update the input field accordingly
+    // For demonstration, assuming the task name is stored in a global variable or similar
+    taskNameElement.value = tasks[taskId].name; // Replace 'tasks' and 'taskId' with actual data retrieval logic
+
+    // Show the pop-up
+    document.getElementById('editTaskPopup').style.display = 'block';
+}
 
 function nosing() {
     urgend.checked = false;

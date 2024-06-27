@@ -81,7 +81,7 @@ function addTaskFunk(name, color, notags, tagU, tagI, start, end){
             <p>${checkedtag}</p>
             </div>
         </div>
-        <img src="trash.svg" id="delete" name="delete"  onclick="deleteT();" >
+        <img src="trash.svg" id="delete" name="delete"  onclick="deleteT(this);" >
         <img src="pencil.svg" id="edit" name="edit"  onclick="editT();">
     </div>
     `
@@ -108,12 +108,11 @@ function prozentding(){
     document.getElementById('erledigt').textContent= `Progress: ${donecheck} / ${totalcheck}`;
 }
 
-function deleteT(img){
-    let rlyDelete = confirm("do you really want to delete this task?") //nachfrage ob man wirklich löschen will
+function deleteT(el){
+    let rlyDelete = confirm("do you really want to delete this task?")
     if (rlyDelete == true){
-        
-        let entry = img.closest('.wholeTask');
-        entry.remove();
+        let element = el;
+        element.remove();
     }
 }
 

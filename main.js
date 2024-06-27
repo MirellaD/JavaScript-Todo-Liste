@@ -1,7 +1,10 @@
+// Entfernt alle Event-Listener, die mit '.data-api' verknüpft sind, um Doppelbindungen zu vermeiden
+$(document).off('.data-api')
 
-document.getElementsByClassName("todaydate").value = new Date().toLocaleDateString();
+// Funktion zur Behandlung des Formular-Submit-Events
 function formHandler(event) {
-    event.preventDefault(); //reloaded die seite nicht beim submitten
+    event.preventDefault(); // Verhindert das Neuladen der Seite beim Absenden des Formulars
+    // Sammelt die Werte aus dem Formular
     let name = document.getElementById("name").value;
     let color = document.querySelector('select[name="color"]').value
     let notags = document.getElementById("none").checked;
@@ -10,43 +13,42 @@ function formHandler(event) {
     let start = document.getElementById("from").value
     let end = document.getElementById("too").value
 
-    if (!name){ //schaut ob der name ausgefüllt worden ist
+    // Überprüft, ob der Name eingegeben wurde
+    if (!name){
         alert("please name your Task")
         return;
     }
-    if (!color){ //schaut ob der name ausgefüllt worden ist
+    // Überprüft, ob eine Farbe ausgewählt wurde
+    if (!color){
         alert("please select a color")
         return;
     }
-    if (notags == false && tagU == false && tagI == false){ //schaut ob eines der checkboxen ausgefüllt worden ist
+    // Überprüft, ob mindestens eine Tag-Option ausgewählt wurde
+    if (notags == false && tagU == false && tagI == false){
+        console.log("no checkmark");
         alert("please choose at least one tag option");
         return;
     }
-    if (start == false){ //schaut ob eines der checkboxen ausgefüllt worden ist
-        alert("please pick a starting date");
-        return;
-    }
-    if (end == false){ //schaut ob eines der checkboxen ausgefüllt worden ist
-        alert("please pick an ending date");
-        return;
-    }
-    
+
+    // Fügt die Aufgabe hinzu und setzt das Formular zurück
     addTaskFunk(name, color, notags, tagU, tagI, start, end);
-        document.getElementById('taskForm').reset();
-        noNeew();
+    document.getElementById('taskForm').reset();
+    noNeew();
 }
 
+// Bindet die formHandler-Funktion an das Submit-Event des Formulars
 const form = document.getElementById("taskForm");
 form.addEventListener("submit", formHandler);
 
-
-function addTaskFunk(name, color, notags, tagU, tagI, start, end){// Function to add a new task
-
+// Funktion zum Hinzufügen einer neuen Aufgabe
+function addTaskFunk(name, color, notags, tagU, tagI, start, end){
     let container = document.getElementById("madeTasks");
     let entry = document.createElement('div');
     entry.className = "addedTask";
-    entry.id = Math.random().toString(36).substring(7); // Assigning a unique ID to each task
+    const uniqueId = Date.now(); // Generiert eine eindeutige ID für jede Aufgabe
+    entry.setAttribute('data-id', uniqueId);
 
+    // Erstellt die Markierungen für die Tags
     let checkedtag = "";
     if(tagU == true){
         checkedtag = "&#10710;";
@@ -54,6 +56,7 @@ function addTaskFunk(name, color, notags, tagU, tagI, start, end){// Function to
     if(tagI == true){
         checkedtag = checkedtag + " &#8252;";
     }
+    // Setzt den HTML-Inhalt für die neue Aufgabe
     entry.innerHTML = `
     <div class="wholeTask">
         <div class="TaskBody">
@@ -64,30 +67,45 @@ function addTaskFunk(name, color, notags, tagU, tagI, start, end){// Function to
             <p>${checkedtag}</p>
             </div>
         </div>
-        <img src="trash.svg" id="delete" name="delete" onclick="deleteT(this);">
-        <img src="pencil.svg" id="edit" name="edit" onclick="editT('${entry.id}');">
+        <img src="trash.svg" id="delete" name="delete"  onclick="deleteT(this);" >
+        <img src="pencil.svg" id="edit" name="edit"  onclick="editT(${uniqueId});">
     </div>
-    `;
+    `
     container.appendChild(entry);
-
-    // Storing the initial values of the task
-    tasks[entry.id] = {name, color, notags, tagU, tagI, start, end};
     prozentding();
-
-
+    oldTask(); // Schließt das Pop-up nach dem Hinzufügen eines Tasks
 }
 
-function neew(){
-    document.getElementById("ontop").style.display = "block";
-        document.getElementById("add").style.display = "block";
-    }
+// Funktion zum Bearbeiten einer Aufgabe
+function editT(taskId){
+    const taskElement = document.querySelector(`[data-id="${taskId}"]`);
+    const taskName = taskElement.querySelector('.TaskName input[type="checkbox"]').nextSibling.nodeValue.trim();
+    taskElement.querySelector('.TaskName').innerHTML = `<input type="text" value="${taskName}" id="editName${taskId}">`;
+    taskElement.querySelector('[name="edit"]').src = "save.svg";
+    taskElement.querySelector('[name="edit"]').setAttribute('onclick', `saveT(${taskId});`);
+}
 
-function noNeew(){
-document.getElementById("ontop").style.display = "none";
+// Funktion zum Speichern der bearbeiteten Aufgabe
+function saveT(taskId){
+    const taskElement = document.querySelector(`[data-id="${taskId}"]`);
+    const editedName = taskElement.querySelector(`#editName${taskId}`).value;
+    taskElement.querySelector('.TaskName').innerHTML = `<input type="checkbox" onclick="prozentding()" name="done" id="done">${editedName}`;
+    taskElement.querySelector('[name="edit"]').src = "pencil.svg"; // Wechselt das Icon zurück zu "pencil.svg"
+    taskElement.querySelector('[name="edit"]').setAttribute('onclick', `editT(${taskId});`);
+}
+
+// Funktionen zum Anzeigen und Verbergen des Formulars für neue Aufgaben
+function newTask(){
+    document.getElementById("ontop").style.display = "block";
+    document.getElementById("add").style.display = "block";
+}
+
+function oldTask(){
+    document.getElementById("ontop").style.display = "none";
     document.getElementById("add").style.display = "none";
 }
 
-
+// Funktion zur Aktualisierung des Fortschritts basierend auf erledigten Aufgaben
 function prozentding(){
     const allecheck = document.querySelectorAll('#done');
     const totalcheck = allecheck.length;
@@ -95,50 +113,21 @@ function prozentding(){
     document.getElementById('erledigt').textContent= `Progress: ${donecheck} / ${totalcheck}`;
 }
 
+// Funktion zum Löschen einer Aufgabe
 function deleteT(el){
     let rlyDelete = confirm("do you really want to delete this task?")
     if (rlyDelete == true){
-        let parentDiv = el.closest('.addedTask'); // sucht das nähste "addedTask" div und speichert das in "parentDiv"
-        parentDiv.remove(); //entfernt den completten div in dem sich das element(delete img) befindet
+        let parentDiv = el.closest('.wholeTask');
+        parentDiv.remove();
     }
-    prozentding();
 }
 
-function editT(event){
-    //thisedit = el.closest('.addedTask') die task die am nehsten ist, finden
-
-    console.log("oui");
-    document.getElementById('editTaskPopup').style.display = 'block';
-
-    document.getElementById('editForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        let taskId = document.getElementById('editPopup').dataset.taskId; // Assuming the popup has a data-task-id attribute set to the task ID
-        let newName = document.getElementById('editName').value;
-        let newColor = document.getElementById('editColor').value;
-        let newNotags = document.getElementById('editTagU').checked || document.getElementById('editTagI').checked;
-        let newTagU = document.getElementById('editTagU').checked;
-        let newTagI = document.getElementById('editTagI').checked;
-        let newStart = document.getElementById('editStart').value;
-        let newEnd = document.getElementById('editEnd').value;
-    
-        // Update the task
-        tasks[taskId] = {name: newName, color: newColor, notags: newNotags, tagU: newTagU, tagI: newTagI, start: newStart, end: newEnd};
-    
-        // Close the popup
-        document.getElementById('editTaskPopup').style.display = 'block';
-        document.getElementById('editForm').style.display = 'block';
-
-    });
-    
-    // Show the pop-up
-
-}
-
+// Funktionen zum Umschalten der Tag-Optionen
 function nosing() {
     urgend.checked = false;
     important.checked = false;
-    }
+}
     
 function yess() {
-none.checked = false;
+    none.checked = false;
 }

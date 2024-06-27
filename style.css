@@ -41,13 +41,17 @@ progress {
     cursor: pointer;
     font-size: large;
 }
-.topTask{
+.TaskName{
+    padding: 1%;
+    flex: 1 1 0%;
+}
+.TaskBody{
     display: flex;
     min-width: 90%;
     background-color: antiquewhite;
     border: solid lightgray 1px;
-    height: 40px;
     align-items: center;
+    max-height: 3em;
 }
 .wholeTask{
     display: flex;
@@ -56,9 +60,7 @@ progress {
     align-items: center;
 }
 .taskTag{
-    right: 0px;
-    align-items: end;
-    float: right;
+    padding: 1%;
     font-size: 20px;
 }
 #madeTasks{

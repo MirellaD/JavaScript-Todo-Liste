@@ -23,6 +23,7 @@
         alert("please select a Tag");
     }
 }*/
+$(document).off('.data-api')
 
 function formHandler(event) {
     event.preventDefault(); //reloaded die seite nicht beim submitten
@@ -80,8 +81,8 @@ function addTaskFunk(name, color, notags, tagU, tagI, start, end){
             <p>${checkedtag}</p>
             </div>
         </div>
-        <img src="trash.svg" id="delete" name="delete"  onclick="deleteT();" alt="Delete">
-        <p id="edit">&#9998</p>
+        <img src="trash.svg" id="delete" name="delete"  onclick="deleteT();" >
+        <img src="pencil.svg" id="edit" name="edit"  onclick="editT();">
     </div>
     `
     container.appendChild(entry);
@@ -107,13 +108,18 @@ function prozentding(){
     document.getElementById('erledigt').textContent= `Progress: ${donecheck} / ${totalcheck}`;
 }
 
-function deleteT(spec){
-    let rlyDelete = confirm("do you really want to delete this task?")
+function deleteT(img){
+    let rlyDelete = confirm("do you really want to delete this task?") //nachfrage ob man wirklich löschen will
     if (rlyDelete == true){
-        let entry = spec;
+        
+        let entry = img.closest('.wholeTask');
         entry.remove();
     }
 }
+
+function editT(){
+
+} 
 
 function nosing() {
     urgend.checked = false;
